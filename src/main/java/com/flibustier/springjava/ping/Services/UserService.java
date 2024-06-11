@@ -1,31 +1,22 @@
 package com.flibustier.springjava.ping.Services;
 
-import com.flibustier.springjava.ping.Entities.UserEntity;
+import com.flibustier.springjava.ping.Entities.User;
 import com.flibustier.springjava.ping.Repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
 public class UserService {
-    private final UserRepository userRepository;
-    private final BCryptPasswordEncoder passwordEncoder;
 
     @Autowired
-    public UserService(UserRepository userRepository){
-        this.userRepository = userRepository;
-        this.passwordEncoder = new BCryptPasswordEncoder();
-    }
+    private UserRepository userRepository;
 
-    public UserEntity registerUser(UserEntity user){
-        if(userRepository.findUsername(user.getUsername()).isPresent() ||
-            userRepository.findByEmail(user.getEmail()).isPresent())
-        {
-            throw new IllegalArgumentException("Username or Email already exists");
-        }
-        String hashedPassword = passwordEncoder.encode(user.getPassword());
-        user.setPassword((hashedPassword));
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
-        return userRepository.save(user);
+    public void register(User user){
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        userRepository.save(user);
     }
 }

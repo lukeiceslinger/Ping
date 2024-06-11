@@ -2,34 +2,19 @@ package com.flibustier.springjava.ping.Entities;
 
 import jakarta.persistence.*;
 
-@Entity
-public class UserEntity {
+import java.util.Objects;
 
+@Entity
+@Table(name = "users")
+public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @Column(nullable = false, unique = true)
     private String username;
-
-    @Column(nullable = false)
     private String password;
-
-    @Column(nullable = false, unique = true)
     private String email;
 
-    // Default constructor
-    public UserEntity() {
-    }
 
-    // Constructor with fields
-    public UserEntity(String username, String password, String email) {
-        this.username = username;
-        this.password = password;
-        this.email = email;
-    }
-
-    // Getters and Setters
     public Long getId() {
         return id;
     }
@@ -62,12 +47,30 @@ public class UserEntity {
         this.email = email;
     }
 
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return Objects.equals(id, user.id) && Objects.equals(username, user.username) && Objects.equals(password, user.password) && Objects.equals(email, user.email);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, username, password, email);
+    }
+
     @Override
     public String toString() {
-        return "UserEntity{" +
+        return "User{" +
                 "id=" + id +
                 ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
                 ", email='" + email + '\'' +
                 '}';
     }
+
+
 }
+
