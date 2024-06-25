@@ -5,13 +5,18 @@ import jakarta.persistence.*;
 import java.util.Objects;
 
 @Entity
-@Table(name = "users")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(nullable = false, unique = true)
     private String username;
+
+    @Column(nullable = false)
     private String password;
+
+    @Column(nullable = false, unique = true)
     private String email;
 
 
@@ -47,7 +52,6 @@ public class User {
         this.email = email;
     }
 
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -61,6 +65,16 @@ public class User {
         return Objects.hash(id, username, password, email);
     }
 
+    public User() {
+    }
+
+    public User(Long id, String username, String password, String email) {
+        this.id = id;
+        this.username = username;
+        this.password = password;
+        this.email = email;
+    }
+
     @Override
     public String toString() {
         return "User{" +
@@ -70,7 +84,4 @@ public class User {
                 ", email='" + email + '\'' +
                 '}';
     }
-
-
 }
-
